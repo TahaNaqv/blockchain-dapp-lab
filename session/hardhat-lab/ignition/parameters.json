@@ -1,0 +1,4 @@
+{
+  "FastTokenModule": { "name": "Ali Coin", "symbol": "ALI" },
+  "HelloBlockchainModule": { "initialMessage": "Deployed with Hardhat Ignition!" }
+}

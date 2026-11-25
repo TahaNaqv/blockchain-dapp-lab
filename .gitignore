@@ -1,0 +1,21 @@
+# dependencies & builds
+node_modules/
+dist/
+artifacts/
+cache/
+types/
+coverage/
+backend/src/generated/prisma/
+
+# local chain deployments (Sepolia deployments in chain-11155111 may be committed in YOUR project if you want)
+**/ignition/deployments/chain-31337/
+
+# secrets - NEVER commit these
+.env
+.env.*
+!.env.example
+
+# misc
+*.log
+.DS_Store
+addresses.csv

@@ -1,0 +1,15 @@
+# Kept here on purpose: when you copy dapp/ into your own repository, this protects your secrets.
+node_modules/
+dist/
+coverage/
+*.log
+contracts/artifacts/
+contracts/cache/
+contracts/types/
+contracts/ignition/deployments/chain-31337/
+backend/src/generated/prisma/
+
+# secrets - NEVER commit these
+.env
+.env.*
+!.env.example

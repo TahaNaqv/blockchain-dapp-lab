@@ -1,0 +1,11 @@
+**/node_modules
+**/.env
+**/dist
+**/coverage
+contracts/artifacts
+contracts/cache
+contracts/types
+backend/src/generated/prisma
+frontend/*
+!frontend/package.json
+.git

@@ -1,0 +1,18 @@
+{
+  "name": "dapp",
+  "private": true,
+  "description": "Reference full-stack DApp: Hardhat (contracts) + Express/PostgreSQL (backend) + React (frontend), all TypeScript",
+  "workspaces": ["contracts", "backend", "frontend"],
+  "scripts": {
+    "test": "npm run test -w contracts && npm run test -w backend",
+    "typecheck": "npm run typecheck -w contracts && npm run typecheck -w backend && npm run typecheck -w frontend",
+    "build": "npm run build -w backend && npm run build -w frontend",
+    "deploy:sepolia": "npm run deploy:sepolia -w contracts",
+    "export": "npm run export -w contracts",
+    "webhook:query": "npm run webhook:query -w contracts",
+    "db:up": "docker compose up -d db",
+    "db:migrate": "npm run db:migrate -w backend",
+    "backend": "npm run dev -w backend",
+    "frontend": "npm run dev -w frontend"
+  }
+}
