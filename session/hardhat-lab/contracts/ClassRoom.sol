@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-/// @title ClassRoom - the shared contract the whole class talks to (Lab 3B)
-/// @notice The teacher deploys ONE instance on the class chain. Every student:
-///         1) registers (name + roll no), 2) posts to the on-chain wall,
-///         3) casts ONE vote in the live poll. Everything is public & permanent.
+/// @title ClassRoom - a small class-poll contract used in Lab 3 (testing).
+/// @notice Students register (name + roll no), post to an on-chain wall, and cast ONE vote. The tests in
+///         test/ClassRoom.t.sol show how to test access control, custom errors and fuzzing.
 contract ClassRoom {
     struct Student {
         string name;

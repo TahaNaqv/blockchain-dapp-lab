@@ -53,7 +53,16 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 
   const switchChain = useCallback(async () => {
     if (!eth) return;
-    await eth.request({ method: "wallet_switchEthereumChain", params: [{ chainId: CHAIN_HEX }] });
+    try {
+      await eth.request({ method: "wallet_switchEthereumChain", params: [{ chainId: CHAIN_HEX }] });
+    } catch (err) {
+      // 4902 = MetaMask doesn't know this chain. Sepolia is built in; the local Hardhat chain (31337) must be added once.
+      if ((err as { code?: number }).code !== 4902 || (CHAIN_ID as number) !== 31337) throw err;
+      await eth.request({
+        method: "wallet_addEthereumChain",
+        params: [{ chainId: CHAIN_HEX, chainName: "Hardhat Local", rpcUrls: ["http://127.0.0.1:8545"], nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 } }],
+      });
+    }
   }, [eth]);
 
   const connect = useCallback(async () => {

@@ -56,23 +56,31 @@ code, screenshots or GitHub. If it leaks, delete the key in the dashboard and cr
 
 ### 4.1 Hardhat (deployments, scripts)
 ```bash
-cd contracts
+cd dapp/contracts
 npx hardhat keystore set SEPOLIA_RPC_URL        # paste https://eth-sepolia.g.alchemy.com/v2/<KEY>
-npx hardhat keystore set SEPOLIA_PRIVATE_KEY    # practice wallet
+npx hardhat keystore set SEPOLIA_PRIVATE_KEY    # practice wallet (skip if you set it in the session)
 ```
-`hardhat.config.ts` reads both with `configVariable(...)` — they're stored **encrypted**, never in your code.
+`dapp/contracts/hardhat.config.ts` reads both with `configVariable(...)`. They're stored **encrypted**, never in your code.
+The keystore is **shared by all your Hardhat projects**: set each key once (`--force` replaces it).
+
+> The **session labs** (`session/hardhat-lab`) don't need Alchemy: they use a free public RPC by default. You *can* point them at
+> Alchemy with the environment variable `SEPOLIA_RPC_URL` (bash `export SEPOLIA_RPC_URL=...`, PowerShell `$env:SEPOLIA_RPC_URL="..."`).
 
 ### 4.2 Backend (`backend/.env`)
 ```
 RPC_URL="https://eth-sepolia.g.alchemy.com/v2/<KEY>"
 LOG_CHUNK_BLOCKS=10        # free plan limit for eth_getLogs
 ```
-Quick test from a terminal (should print the latest block number in hex):
+Quick test: it should print the latest block number (hex in bash, a result object in PowerShell):
 ```bash
-curl -s -X POST -H "content-type: application/json" \
-  --data '{"jsonrpc":"2.0","id":1,"method":"eth_blockNumber","params":[]}' \
-  https://eth-sepolia.g.alchemy.com/v2/<KEY>
+# bash / Git Bash / macOS / Linux
+curl -s -X POST -H "content-type: application/json" --data '{"jsonrpc":"2.0","id":1,"method":"eth_blockNumber","params":[]}' https://eth-sepolia.g.alchemy.com/v2/<KEY>
 ```
+```powershell
+# PowerShell
+Invoke-RestMethod -Method Post -ContentType "application/json" -Body '{"jsonrpc":"2.0","id":1,"method":"eth_blockNumber","params":[]}' -Uri "https://eth-sepolia.g.alchemy.com/v2/<KEY>"
+```
+Easiest of all: start the backend and open http://localhost:4000/ready → `"rpc": true`.
 
 ---
 
@@ -130,14 +138,19 @@ Alchemy can't reach `localhost`. Alchemy's docs recommend **ngrok**:
 2. Chain **Ethereum**, network **Sepolia**.
 3. Webhook URL: `https://<ngrok-or-production-domain>/webhooks/alchemy`.
 4. Paste the GraphQL query from `npm run webhook:query`.
-5. **Test Webhook** (the dashboard needs a block hash to test; on creation Alchemy automatically switches the query to the *latest* block).
-6. **Create Webhook**.
+5. *(Optional)* **Test Webhook**: to test, the dashboard needs a specific block, so it may ask you to fill in a block hash. You can skip the
+   test. When you create the webhook, Alchemy automatically runs your query on **every new block**.
+6. **Create Webhook**. You should see it listed as **Active**.
 7. Open the webhook → copy the **Signing key** (top right) → `backend/.env`:
    ```
    ALCHEMY_WEBHOOK_SIGNING_KEY="whsec_..."
    ALCHEMY_WEBHOOK_ID="wh_..."      # optional: reject deliveries from any other webhook
    ```
 8. Restart the backend. Vote in the app → the backend log shows `webhook processed` within seconds.
+
+**Redeployed your contract (new address) or added events?** The old webhook still filters the *old* address. Create a **new** webhook with
+the new `npm run webhook:query`, put **its** signing key (and id) in `backend/.env`, and delete the old webhook (the free plan allows 5).
+**ngrok restarted (new URL)?** Edit the webhook's URL in the dashboard, or create a new one.
 
 *(Automation option: the Notify API `POST https://dashboard.alchemy.com/api/create-webhook` with header `X-Alchemy-Token` creates the same
 webhook from a script; body `{ network: "ETH_SEPOLIA", webhook_type: "GRAPHQL", webhook_url, graphql_query }`.)*

@@ -1,6 +1,6 @@
-import { votingInterface, type RawLog } from "../lib/chain.ts";
+import { contractInterface, type RawLog } from "../lib/chain.ts";
 
-export type VotingEvent =
+export type AppEvent =
   | {
       name: "ElectionCreated";
       args: { electionId: number; creator: string; title: string; options: string[]; startTime: number; endTime: number; allowlistOnly: boolean };
@@ -9,7 +9,7 @@ export type VotingEvent =
   | { name: "VoteCast"; args: { electionId: number; voter: string; option: number } }
   | { name: "ElectionCancelled"; args: { electionId: number } };
 
-export type DecodedLog = VotingEvent & {
+export type DecodedLog = AppEvent & {
   id: string; // `${txHash}:${logIndex}`
   blockNumber: number;
   blockHash: string;
@@ -22,7 +22,7 @@ export type DecodedLog = VotingEvent & {
 export function decodeLog(log: RawLog, blockTimestamp: number): DecodedLog | null {
   let parsed;
   try {
-    parsed = votingInterface.parseLog({ topics: log.topics, data: log.data });
+    parsed = contractInterface.parseLog({ topics: log.topics, data: log.data });
   } catch {
     return null;
   }

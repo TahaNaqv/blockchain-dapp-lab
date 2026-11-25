@@ -1,9 +1,9 @@
-// PostgreSQL schema for the Voting DApp backend.
+// PostgreSQL schema for the DApp backend.
 //
 // Design: event-sourced.
 //   ChainEvent  = every decoded contract log (idempotent key: txHash:logIndex), from the Alchemy webhook (unconfirmed)
 //                 or the reconciler (confirmed after N blocks).
-//   Election / Vote / Voter = read-models PROJECTED from ChainEvents. Each row references the event that created it with
+//   Read-models = your app tables, PROJECTED from ChainEvents. Each row references the event that created it with
 //                 onDelete: Cascade, so if a chain reorg removes an event, everything derived from it disappears too.
 
 generator client {

@@ -1,10 +1,10 @@
 // Everything that talks to the blockchain goes through this small interface,
 // so the indexer can be tested with a fake chain (including reorgs).
 import { Contract, Interface, JsonRpcProvider, type Log } from "ethers";
-import { VOTING_ABI } from "../generated/contract.ts";
+import { CONTRACT_ABI } from "../generated/contract.ts";
 import { env } from "../config/env.ts";
 
-export const votingInterface = new Interface(VOTING_ABI);
+export const contractInterface = new Interface(CONTRACT_ABI);
 
 export interface RawLog {
   address: string;
@@ -30,7 +30,7 @@ export class RpcChainReader implements ChainReader {
 
   constructor(rpcUrl = env.RPC_URL) {
     this.provider = new JsonRpcProvider(rpcUrl, env.chainId, { staticNetwork: true });
-    this.contract = new Contract(env.contractAddress, VOTING_ABI, this.provider);
+    this.contract = new Contract(env.contractAddress, CONTRACT_ABI, this.provider);
   }
 
   getBlockNumber() {

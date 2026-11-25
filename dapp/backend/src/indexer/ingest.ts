@@ -91,8 +91,8 @@ async function project(tx: Tx, ev: DecodedLog): Promise<IngestResult> {
 }
 
 function defer(ev: DecodedLog): IngestResult {
-  // The election this event refers to isn't indexed yet (out-of-order delivery).
+  // The parent record this event refers to is not indexed yet - out-of-order delivery.
   // The raw event is stored; the reconciler re-applies it when it processes the block range in order.
-  logger.warn({ event: ev.name, id: ev.id, electionId: ev.args.electionId }, "projection deferred: election not indexed yet");
+  logger.warn({ event: ev.name, id: ev.id, args: ev.args }, "projection deferred: parent record not indexed yet");
   return "deferred";
 }

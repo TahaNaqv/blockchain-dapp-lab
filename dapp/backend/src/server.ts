@@ -22,7 +22,7 @@ const app = createApp({ db, chain, getLastConfirmedBlock: () => reconciler.lastC
 const server = app.listen(env.PORT, () => {
   logger.info(
     { port: env.PORT, contract: env.contractAddress, chainId: env.chainId, webhook: env.webhookEnabled ? "/webhooks/alchemy" : "disabled" },
-    "voting backend started",
+    "backend started",
   );
 });
 reconciler.start();

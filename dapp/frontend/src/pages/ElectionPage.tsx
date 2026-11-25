@@ -5,7 +5,7 @@ import { TxStatus } from "../components/TxStatus";
 import { EXPLORER } from "../config";
 import { useElection, useEligibility, useVotes } from "../hooks/queries";
 import { useTransaction } from "../hooks/useTransaction";
-import { votingContract } from "../lib/contract";
+import { appContract } from "../lib/contract";
 import { useWallet } from "../wallet/WalletProvider";
 
 export function ElectionPage() {
@@ -20,7 +20,7 @@ export function ElectionPage() {
   if (error || !e) return <p className="error">{error?.message ?? "Not found"}</p>;
 
   const vote = (option: number) =>
-    tx.run(async () => votingContract(await getSigner()).getFunction("vote")(id, option));
+    tx.run(async () => appContract(await getSigner()).getFunction("vote")(id, option));
 
   const busy = tx.state.kind === "wallet" || tx.state.kind === "pending";
   const canVote = !!account && chainOk && !!elig?.canVote && !busy;

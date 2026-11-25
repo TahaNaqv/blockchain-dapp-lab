@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { explainError, votingInterface } from "../src/lib/contract";
+import { explainError, contractInterface } from "../src/lib/contract";
 
 describe("explainError", () => {
   it("decodes our custom errors into friendly messages", () => {
-    const data = votingInterface.encodeErrorResult("AlreadyVoted", ["0x00000000000000000000000000000000000000a1"]);
+    const data = contractInterface.encodeErrorResult("AlreadyVoted", ["0x00000000000000000000000000000000000000a1"]);
     expect(explainError({ data })).toBe("You have already voted in this election.");
   });
   it("detects a wallet rejection", () => {

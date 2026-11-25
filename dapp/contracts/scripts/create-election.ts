@@ -1,6 +1,8 @@
-// Create an election from the command line (admin wallet = SEPOLIA_PRIVATE_KEY).
-//   TITLE="Best use-case?" OPTIONS="Remittances,Land records,Digital ID" HOURS=2 ALLOWLIST=false \
-//     npx hardhat run scripts/create-election.ts --network sepolia
+// Create an election from the command line (admin = the deployer wallet).
+//   npm run election:sepolia      (or election:local)  -> a demo election with default title/options, open for 2 hours
+// Custom values via environment variables:
+//   bash:        TITLE="Best use-case?" OPTIONS="A,B,C" HOURS=2 ALLOWLIST=false npm run election:sepolia
+//   PowerShell:  $env:TITLE="Best use-case?"; $env:OPTIONS="A,B,C"; $env:HOURS="2"; npm run election:sepolia
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { network } from "hardhat";

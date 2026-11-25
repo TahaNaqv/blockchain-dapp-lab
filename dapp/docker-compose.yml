@@ -1,4 +1,4 @@
-# Local infrastructure. `npm run db:up` starts PostgreSQL only; `docker compose up --build` also runs the backend.
+# Local infrastructure. `npm run db:up` starts PostgreSQL only; `docker compose --profile full up --build` also runs the backend.
 services:
   db:
     image: postgres:17-alpine

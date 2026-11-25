@@ -39,7 +39,10 @@ console.log(`\nMe      : ${fmt(await token.balanceOf(me.address))}`);
 console.log(`Friend  : ${fmt(await token.balanceOf(friend))}`);
 
 // EVENTS: Transfer events of this token since it was deployed
-const fromBlock = Math.max(0, (receipt?.blockNumber ?? 0) - 5000);
-const events = await token.queryFilter(token.filters.Transfer(), fromBlock, "latest");
+// Some RPC plans (e.g. Alchemy free: 10 blocks per eth_getLogs) limit the range -> fall back to the last few blocks.
+const toBlock = receipt?.blockNumber ?? 0;
+const events = await token
+  .queryFilter(token.filters.Transfer(), Math.max(0, toBlock - 5000), toBlock)
+  .catch(() => token.queryFilter(token.filters.Transfer(), Math.max(0, toBlock - 9), toBlock));
 console.log(`\nTransfer history (${events.length} events):`);
 for (const e of events) console.log(`  ${e.args.from.slice(0, 8)}… -> ${e.args.to.slice(0, 8)}…  ${fmt(e.args.value)}`);

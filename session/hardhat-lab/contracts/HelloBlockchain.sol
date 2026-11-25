@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-/// @title HelloBlockchain - Lab 3 warm-up (your first smart contract)
+/// @title HelloBlockchain - Lab 2 (your first smart contract)
 /// @notice Shows: state variables, constructor, view vs. write functions,
 ///         msg.sender, events, and require().
 contract HelloBlockchain {

@@ -9,9 +9,12 @@
     "typecheck": "prisma generate && tsc --noEmit",
     "test": "prisma generate && vitest run",
     "db:migrate": "prisma migrate dev",
+    "postdb:migrate": "prisma generate",
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "db:reset": "prisma migrate reset --force",
+    "postdb:reset": "prisma generate"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",

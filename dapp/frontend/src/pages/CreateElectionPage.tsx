@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { TxStatus } from "../components/TxStatus";
 import { useAccount } from "../hooks/queries";
 import { useTransaction } from "../hooks/useTransaction";
-import { votingContract } from "../lib/contract";
+import { appContract } from "../lib/contract";
 import { useWallet } from "../wallet/WalletProvider";
 
 export function CreateElectionPage() {
@@ -23,7 +23,7 @@ export function CreateElectionPage() {
     const list = options.split("\n").map((s) => s.trim()).filter(Boolean);
     const start = Math.floor(Date.now() / 1000);
     const ok = await tx.run(async () =>
-      votingContract(await getSigner()).getFunction("createElection")(title, list, start, start + Math.round(hours * 3600), allowlist),
+      appContract(await getSigner()).getFunction("createElection")(title, list, start, start + Math.round(hours * 3600), allowlist),
     );
     if (ok) setTimeout(() => navigate("/"), 1500);
   }

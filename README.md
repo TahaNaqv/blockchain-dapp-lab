@@ -21,7 +21,10 @@ blockchain-dapp-lab/
 │   ├── 01-setup.md               ← START HERE: install Node.js, VS Code, MetaMask, get free test ETH
 │   ├── 02-session-lab.md         ← the guest-session labs, step by step
 │   ├── 03-alchemy.md             ← free Alchemy account, RPC URL, webhooks, ngrok
-│   └── 04-build-your-dapp.md     ← turn the starter into YOUR DApp (worked example: Tip Jar)
+│   ├── 04-build-your-dapp.md     ← turn the starter into YOUR DApp (worked example: Tip Jar)
+│   ├── 05-how-it-works.md        ← follow one vote through the code (read before the assignment)
+│   ├── GLOSSARY.md               ← every term in plain English
+│   └── lab-answers.md            ← answers to the session questions (try first!)
 │
 ├── session/                      ← 🧪 GUEST SESSION ACTIVITY (Hardhat only)
 │   ├── playground/               ←   blockchain_playground.html: hash, mine, tamper (offline, in the browser)
@@ -43,9 +46,12 @@ blockchain-dapp-lab/
 |---|---|---|
 | 1 | Set up your laptop (≈ 30 min, at home) | [docs/01-setup.md](docs/01-setup.md) |
 | 2 | Do the session labs: hashing → first contract on Sepolia → testing → your own token → a hack & its fix → class vote | [docs/02-session-lab.md](docs/02-session-lab.md) |
-| 3 | Create a free Alchemy account (RPC + webhooks) | [docs/03-alchemy.md](docs/03-alchemy.md) |
-| 4 | Run the full Voting DApp end to end | [dapp/README.md](dapp/README.md) |
-| 5 | Build your own small DApp | [ASSIGNMENT.md](ASSIGNMENT.md) + [docs/04-build-your-dapp.md](docs/04-build-your-dapp.md) |
+| 3 | Understand how a full DApp works: follow one vote through the code | [docs/05-how-it-works.md](docs/05-how-it-works.md) |
+| 4 | Run the full Voting DApp, locally first | [dapp/README.md](dapp/README.md) |
+| 5 | Create a free Alchemy account (RPC + webhooks) for Sepolia | [docs/03-alchemy.md](docs/03-alchemy.md) |
+| 6 | Build your own small DApp | [ASSIGNMENT.md](ASSIGNMENT.md) + [docs/04-build-your-dapp.md](docs/04-build-your-dapp.md) |
+
+Stuck on a word? → [docs/GLOSSARY.md](docs/GLOSSARY.md). You need **Node.js LTS, Git, VS Code and MetaMask**. All covered in step 1.
 
 ### Quick start — session labs
 ```bash
@@ -57,22 +63,23 @@ npx hardhat test          # ✅ 14 passing
 
 ### Quick start — full-stack DApp
 ```bash
-cd blockchain-dapp-lab/dapp
+cd ../../dapp             # from session/hardhat-lab  (or: cd blockchain-dapp-lab/dapp from where you cloned)
 npm install
 npm run test -w contracts # ✅ 18 passing
-# then follow dapp/README.md: deploy to Sepolia → database → backend → webhook → frontend
+# then follow dapp/README.md §3A: local chain → database → backend → frontend
 ```
 
 ---
 
 ## 🧱 How a real DApp fits together (what you'll build)
 
-```
-React ──HTTP──▶ Express API ──▶ PostgreSQL
-  │                  ▲
-  │ MetaMask signs   │ Alchemy webhook (push, seconds)  +  reconciler (pull: history, confirmations, reorgs)
-  ▼                  │
-        Smart contract on Sepolia
+```mermaid
+flowchart LR
+    U([User]) --> FE["React frontend"]
+    FE -- "HTTP: all reads" --> BE["Express backend"]
+    BE <--> DB[("PostgreSQL")]
+    FE -- "MetaMask signs writes" --> SC["Smart contract on Sepolia"]
+    SC -- "events: Alchemy webhook (seconds) + reconciler (history, confirmations, reorgs)" --> BE
 ```
 - **Reads:** React → your API → your database (fast, searchable, paginated).
 - **Writes:** the *user's* wallet signs the transaction → the contract emits an **event** → your backend hears it and stores it.

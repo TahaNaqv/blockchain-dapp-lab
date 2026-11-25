@@ -1,7 +1,10 @@
 # 🧱 Hands-On Blockchain Lab — "From Hash to DApp"
 
-**FAST-NUCES Islamabad · Blockchain course (Dr. Noshina Tariq) · Guest session**
-Wednesday 25 Nov · 11:30 AM – 1:00 PM
+**FAST-NUCES Islamabad · Blockchain course (Dr. Noshina Tariq) · Guest session (25 Nov 2026)**
+
+> 📚 **Doing this on your own after the session?** Everything works for self-study. Plan ~3 hours:
+> setup (at home) → Labs 1–5 (~1.5 h) → Lab 6 with your own deployed Voting contract (see Lab 6). Answers to the questions:
+> [lab-answers.md](lab-answers.md) (try first!). Unknown word → [GLOSSARY.md](GLOSSARY.md).
 
 > We work the way blockchain engineers do in industry: **Hardhat** (framework) + **VS Code** + **MetaMask** + **Etherscan**,
 > deploying to **Sepolia** — Ethereum's public test network. Real blockchain, real nodes worldwide, every transaction public on
@@ -89,10 +92,12 @@ npx hardhat test mocha      # see "HelloBlockchain" tests pass
 ```
 
 ### 2.4 Store your key safely (4 min)
-MetaMask → account menu → **Account details** → **Show private key** → password → copy. ⚠️ Practice wallet only!
+MetaMask → account selector at the top → **⋮** next to your account → **Account details** → **Private key** → password →
+**hold "Hold to reveal Private Key"** → copy. ⚠️ Practice wallet only! *(Tip: do this at home before class; it saves time.)*
 ```bash
 npx hardhat keystore set SEPOLIA_PRIVATE_KEY
 ```
+*(Already set? The keystore is shared by all your Hardhat projects, so you're done. Use `--force` to replace the key.)*
 First time: create a **keystore password**, then paste the key. It's stored **encrypted** — never in code, never on GitHub.
 Hardhat asks for the keystore password whenever you use Sepolia.
 
@@ -190,15 +195,26 @@ Find `re-entries: 10` and `loot (wei): 11000000000000000000` — the attacker pu
 
 ## ⭐ Lab 6 — The Voting DApp: Whole Class, One Contract, Full Stack (8 min)
 
-The presenter deployed the **Voting** contract (from [`dapp/`](../dapp) in this repo) on Sepolia and runs its **Express backend**
+In class, the presenter deployed the **Voting** contract (from [`dapp/`](../dapp) in this repo) on Sepolia and runs its **Express backend**
 (PostgreSQL + Alchemy webhook) and **React frontend** on the projector. Address on the board: `0x______________________________`
+
+> 📚 **On your own?** Deploy your own Voting contract and election, then use that address (Election #1):
+> `cd ../../dapp` → `npm install` → `cd contracts` → `npx hardhat keystore set SEPOLIA_RPC_URL` (any Sepolia RPC URL, e.g.
+> `https://ethereum-sepolia-rpc.publicnode.com`, or your Alchemy URL) → `cd ..` → `npm run deploy:sepolia` → `npm run election:sepolia`.
+> The deploy output shows `VotingModule#Voting - 0x…`. That's your `VOTING_ADDRESS`. To also *see* it in the React app, follow
+> [dapp/README.md](../dapp/README.md) §3B.
+
 ```bash
 # Git Bash / macOS / Linux - first just look, then vote (OPTION = 0..3)
 VOTING_ADDRESS=0x... npx hardhat run scripts/vote.ts --network sepolia
 VOTING_ADDRESS=0x... OPTION=0 npx hardhat run scripts/vote.ts --network sepolia
-# PowerShell
-$env:VOTING_ADDRESS="0x..."; $env:OPTION="0"; npx hardhat run scripts/vote.ts --network sepolia
 ```
+```powershell
+# PowerShell - first just look, then vote
+$env:VOTING_ADDRESS="0x..."; npx hardhat run scripts/vote.ts --network sepolia
+$env:OPTION="0"; npx hardhat run scripts/vote.ts --network sepolia
+```
+(Another election? Add `ELECTION_ID=2` / `$env:ELECTION_ID="2"`.)
 Watch the projector: Alchemy sends your vote to the backend → it's stored in PostgreSQL as *pending* → the React app updates →
 a few blocks later it becomes *final*. Run the script again with another option → `✘ Vote rejected: AlreadyVoted`.
 
@@ -212,8 +228,9 @@ Same architecture as the Voting DApp: **React → Express API → PostgreSQL**, 
 Brief, project ideas and rubric: **[ASSIGNMENT.md](../ASSIGNMENT.md)** · Starter: **[`dapp/`](../dapp)** · How-to: **[04-build-your-dapp.md](04-build-your-dapp.md)** · **[03-alchemy.md](03-alchemy.md)**.
 
 ## 🏠 Extra practice (optional)
-1. Add a voting **deadline** to `ClassRoom` (`block.timestamp`) + a test using `vm.warp`; deploy v2 to Sepolia.
-2. Verify your token's source on Etherscan: `npx hardhat ignition verify <deployment-id>` (needs a free Etherscan API key in config).
+1. Add a voting **deadline** to `ClassRoom` (`block.timestamp`) + a test using `vm.warp`; write an Ignition module for it and deploy it to Sepolia.
+2. Publish your token's source code on Etherscan ("verify"): get a free API key at etherscan.io, then follow
+   https://hardhat.org/docs/guides/smart-contract-verification
 3. Write `transfer` / `balanceOf` for a token **without** OpenZeppelin, and test it.
 4. Play **Ethernaut** levels 1–5 (ethernaut.openzeppelin.com) — runs on Sepolia.
 5. Try **Foundry** (getfoundry.sh): your `.t.sol` tests use the same syntax — `forge test` runs them.

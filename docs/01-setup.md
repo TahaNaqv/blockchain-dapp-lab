@@ -17,7 +17,7 @@
 | **Node.js (LTS)** + **npm** | JavaScript runtime + package manager | Hardhat is a Node.js program; npm downloads Hardhat, OpenZeppelin, ethers.js |
 | **VS Code** | Code editor | Write Solidity & TypeScript; built-in terminal |
 | **Hardhat for VS Code** extension (Nomic Foundation) | Solidity language support | Syntax highlighting, errors as you type, go-to-definition, formatting |
-| **Git** *(recommended)* | Version control | Every real project lives in Git; also needed for some npm packages |
+| **Git** *(required)* | Version control | Every real project lives in Git; `npm install` also needs it for one package (`forge-std`) |
 | **MetaMask** | Browser wallet | Holds your (practice) keys; shows your test ETH & tokens |
 | **Hardhat 3** | Ethereum development framework | Compile, test, deploy, script — installed per project by npm (not globally) |
 | *Windows only:* **Microsoft Visual C++ Redistributable** | Runtime libraries | Hardhat's fast Rust engine needs them on Windows (official Hardhat requirement) |
@@ -45,7 +45,7 @@ Download and run: **https://aka.ms/vs/17/release/vc_redist.x64.exe** (official M
 1. **https://code.visualstudio.com** → *Download for Windows* → run the installer.
 2. On "Select Additional Tasks", tick **"Add to PATH"** and **"Add 'Open with Code' action to … context menu"** (both very handy).
 
-### Step 4 — Git (recommended)
+### Step 4 — Git (required)
 **https://git-scm.com/download/win** → run the installer → defaults are fine (this also gives you **Git Bash**, a Linux-style terminal).
 
 > ⚡ **Shortcut for power users:** open **PowerShell** and run (Windows Package Manager, built into Windows 10/11):
@@ -168,11 +168,18 @@ node -v && npm -v && git --version && code --version
 ## 4. The class starter project
 
 1. Get the course repository into `C:\dev` (Windows) or `~/dev` (macOS/Linux):
-   ```bash
-   cd C:\dev          # or: mkdir -p ~/dev && cd ~/dev
+   ```powershell
+   # Windows (PowerShell or Command Prompt)
+   mkdir C:\dev
+   cd C:\dev
    git clone https://github.com/TahaNaqv/blockchain-dapp-lab.git
    ```
-   (No Git? On GitHub click **Code → Download ZIP** and unzip it.)
+   ```bash
+   # macOS / Linux / Git Bash
+   mkdir -p ~/dev && cd ~/dev
+   git clone https://github.com/TahaNaqv/blockchain-dapp-lab.git
+   ```
+   Later, to get updates: `cd blockchain-dapp-lab` → `git pull`.
 2. VS Code → **File → Open Folder…** → select **`blockchain-dapp-lab/session/hardhat-lab`** → *Yes, I trust the authors*.
 3. Open the terminal (`` Ctrl+` ``) and run:
    ```bash
@@ -239,6 +246,7 @@ Our project's `hardhat.config.ts` already defines a `sepolia` network. It needs 
    ```
    First time: create a **keystore password** (remember it!) → then paste the key (with or without `0x`).
    Check: `npx hardhat keystore list` → shows `SEPOLIA_PRIVATE_KEY`.
+   The keystore is **shared by all your Hardhat projects** (session labs and `dapp/`), so you set each key once. `--force` replaces it.
 3. From now on, Sepolia commands ask for your keystore password. Example (Lab 2 of the session):
    ```bash
    npx hardhat ignition deploy ignition/modules/HelloBlockchain.ts --network sepolia --parameters ignition/parameters.json
@@ -273,7 +281,7 @@ use Neon — the code is identical, only `DATABASE_URL` changes.
 | MetaMask | network menu | **Sepolia** selected |
 | Test ETH | MetaMask on Sepolia | **~0.05 SepoliaETH** |
 | *(optional)* own project | `npx hardhat --init --template mocha-ethers` | 5 passing |
-| *(optional)* keystore | `npx hardhat keystore list` | `SEPOLIA_PRIVATE_KEY` |
+| Keystore (recommended before class) | `npx hardhat keystore list` | `SEPOLIA_PRIVATE_KEY` |
 
 ---
 
@@ -294,6 +302,8 @@ use Neon — the code is identical, only `DATABASE_URL` changes.
 | `HHE7: Configuration Variable "SEPOLIA_PRIVATE_KEY" not found` | Do section 6 (keystore). |
 | `HHE33: Invalid private key value` | Pasted wrong/partial key → `npx hardhat keystore set SEPOLIA_PRIVATE_KEY --force`. |
 | Forgot keystore password | `npx hardhat keystore path` shows the file → delete it → set the key again. |
+| `npm install` fails with `spawn git ENOENT` / git errors | Git isn't installed (or the terminal was opened before installing it). Install Git, reopen the terminal. |
+| `ENOSPC: System limit for number of file watchers reached` (Linux) | `echo fs.inotify.max_user_watches=524288 \| sudo tee -a /etc/sysctl.conf && sudo sysctl -p` |
 | VS Code shows red squiggles on `import "@openzeppelin/..."` | Run `npm install` first; open the **project folder** (not a parent folder) in VS Code; reload window (`Ctrl+Shift+P` → *Reload Window*). |
 | Faucet says limit reached / captcha loop | One claim per account per day; try later from home Wi-Fi, or use the class backup form. |
 | Apple Silicon (M1/M2/M3) issues | Use the native Node installer/nvm (not Rosetta). `node -p process.arch` should print `arm64`. |

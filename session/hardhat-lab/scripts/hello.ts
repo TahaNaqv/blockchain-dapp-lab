@@ -37,7 +37,11 @@ console.log(`        mined in block #${receipt?.blockNumber} · gas used ${recei
 console.log(`[read]  message       = "${await hello.message()}"`);
 
 // 3. EVENTS - the logs your contract emitted (what frontends/indexers listen to)
-const logs = await hello.queryFilter(hello.filters.MessageChanged(), Math.max(0, (receipt?.blockNumber ?? 0) - 5000), "latest");
+// Some RPC plans (e.g. Alchemy free: 10 blocks per eth_getLogs) limit the range -> fall back to the last few blocks.
+const toBlock = receipt?.blockNumber ?? 0;
+const logs = await hello
+  .queryFilter(hello.filters.MessageChanged(), Math.max(0, toBlock - 5000), toBlock)
+  .catch(() => hello.queryFilter(hello.filters.MessageChanged(), Math.max(0, toBlock - 9), toBlock));
 console.log(`\n[events] ${logs.length} MessageChanged event(s):`);
 for (const e of logs) console.log(`   ${e.args.by.slice(0, 8)}…  "${e.args.oldMessage}" -> "${e.args.newMessage}"`);
 

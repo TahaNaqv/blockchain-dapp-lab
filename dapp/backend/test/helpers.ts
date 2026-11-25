@@ -1,14 +1,16 @@
 import { createHmac } from "node:crypto";
-import { votingInterface, type ChainReader, type RawLog } from "../src/lib/chain.ts";
+import { contractInterface, type ChainReader, type RawLog } from "../src/lib/chain.ts";
 import { env } from "../src/config/env.ts";
 import { createDb, type Db } from "../src/lib/db.ts";
 
 export const db: Db = createDb();
 
+/** Empties every table of YOUR schema (works unchanged after you replace the Voting models). */
 export async function resetDb() {
-  await db.$executeRawUnsafe(
-    'TRUNCATE "Vote", "Voter", "Election", "ChainEvent", "WebhookDelivery", "SyncState" RESTART IDENTITY CASCADE',
+  const tables = await db.$queryRawUnsafe<{ tablename: string }[]>(
+    "SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND tablename <> '_prisma_migrations'",
   );
+  if (tables.length) await db.$executeRawUnsafe(`TRUNCATE ${tables.map((t) => `"${t.tablename}"`).join(", ")} RESTART IDENTITY CASCADE`);
 }
 
 let txCounter = 0;
@@ -18,8 +20,8 @@ export function txHash() {
 export const blockHash = (n: number, fork = "a") => "0x" + (fork + n.toString(16)).padStart(64, "0");
 
 export function encodeLog(name: string, args: unknown[], blockNumber: number, logIndex = 0, hash = blockHash(blockNumber), tx = txHash()): RawLog {
-  const fragment = votingInterface.getEvent(name)!;
-  const { data, topics } = votingInterface.encodeEventLog(fragment, args);
+  const fragment = contractInterface.getEvent(name)!;
+  const { data, topics } = contractInterface.encodeEventLog(fragment, args);
   return { address: env.contractAddress, topics, data, blockNumber, blockHash: hash, transactionHash: tx, logIndex };
 }
 

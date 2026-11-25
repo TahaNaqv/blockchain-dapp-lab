@@ -1,4 +1,4 @@
-# Production image for the backend. Build from the repository root:
+# Production image for the backend. Build from the dapp/ folder (the npm-workspaces root):
 #   docker build -f backend/Dockerfile -t voting-backend .
 FROM node:24-alpine AS build
 WORKDIR /app

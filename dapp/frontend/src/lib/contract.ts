@@ -1,11 +1,11 @@
 import { Contract, Interface, type Signer } from "ethers";
-import { VOTING_ABI, CONTRACT_ADDRESS } from "../generated/contract";
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from "../generated/contract";
 
-export const votingInterface = new Interface(VOTING_ABI);
+export const contractInterface = new Interface(CONTRACT_ABI);
 export const isContractConfigured = !/^0x0{40}$/.test(CONTRACT_ADDRESS);
 
-export function votingContract(signer: Signer) {
-  return new Contract(CONTRACT_ADDRESS, VOTING_ABI, signer);
+export function appContract(signer: Signer) {
+  return new Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 }
 
 const FRIENDLY: Record<string, string> = {
@@ -30,7 +30,7 @@ export function explainError(err: unknown): string {
   const data = e.data ?? e.info?.error?.data;
   if (typeof data === "string" && data.startsWith("0x") && data.length >= 10) {
     try {
-      const parsed = votingInterface.parseError(data);
+      const parsed = contractInterface.parseError(data);
       if (parsed) return FRIENDLY[parsed.name] ?? `Contract rejected the transaction: ${parsed.name}`;
     } catch {
       /* not one of our errors */

@@ -2,7 +2,7 @@
 export const CHAIN_ID = 11155111;
 export const CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000" as const; // run `npm run export` after deploying
 export const DEPLOY_BLOCK = 0;
-export const VOTING_ABI = [
+export const CONTRACT_ABI = [
   {
     "inputs": [
       {

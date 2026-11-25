@@ -27,6 +27,7 @@ export interface TickResult {
 export class Reconciler {
   private timer?: NodeJS.Timeout;
   private running = false;
+  private announcedSynced = false;
   chainHead = 0;
 
   constructor(
@@ -85,6 +86,10 @@ export class Reconciler {
         // Catch up quickly when far behind, otherwise wait for the next interval.
         let r = await this.tick();
         while (this.running && r && r.to < this.chainHead - this.opts.confirmations) r = await this.tick();
+        if (!this.announcedSynced) {
+          this.announcedSynced = true;
+          logger.info({ lastConfirmedBlock: await this.lastConfirmedBlock(), chainHead: this.chainHead }, "indexer up to date - watching for new events");
+        }
       } catch (err) {
         logger.error({ err }, "reconciler tick failed; will retry");
       }
