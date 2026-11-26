@@ -137,7 +137,7 @@ server?". **AI tools are fine — not understanding your own code is not.**
 | Frontend: wallet, data from API, ≥ 2 working transactions with status | 25 |
 | README + demo video | 15 |
 | Code quality & clean Git history (no secrets!) | 10 |
-| **Bonus (up to +10)** | a stretch feature +4 · contract verified on Etherscan +2 · frontend/backend deployed online +2 · CI green on GitHub +2 |
+| **Bonus (up to +10, optional)** | a stretch feature +4 · **WalletConnect** (mobile wallets via QR code) +2 · contract verified on Etherscan +2 · frontend/backend deployed online +2 · CI green on GitHub +2 |
 
 ---
 
@@ -178,6 +178,11 @@ Rules:
 **Do I need Docker?** No. Use a free **Neon** PostgreSQL database (copy its URL into `DATABASE_URL`). Docker is just the easiest local option.
 **Can I use JavaScript instead of TypeScript?** No. TypeScript catches most mistakes before you run anything.
 **Can I use wagmi/viem, Tailwind, or another UI library?** Yes, as long as it's React + Vite + TypeScript.
+**Do we need WalletConnect?** No. The starter connects browser-extension wallets (MetaMask), and that's all the assignment requires.
+*Optional bonus (+2):* also support **mobile wallets** (e.g. MetaMask Mobile scanning a QR code) with WalletConnect, usually via
+**Reown AppKit** (https://docs.reown.com/appkit/react/core/installation) or **RainbowKit** (https://rainbowkit.com), which use wagmi/viem.
+You'll need a free project ID from https://dashboard.reown.com (put it in `frontend/.env`, never hard-code it). Phone wallets can only
+reach **Sepolia**, not your local chain, so test this part after deploying to Sepolia. Keep MetaMask (extension) working too.
 **Can I use Next.js / another backend?** No. React (Vite) + Express, so everyone learns the same architecture.
 **I ran out of SepoliaETH.** Develop locally (free) and deploy to Sepolia once at the end. The Google faucet gives 0.05/day.
 **My webhook doesn't fire.** Is ngrok running and the URL in Alchemy current? Check http://localhost:4040. The reconciler still indexes everything, just slower.
