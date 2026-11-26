@@ -91,12 +91,12 @@ flowchart LR
 
 1. Check the **Troubleshooting** sections in [docs/01-setup.md](docs/01-setup.md) and [dapp/README.md](dapp/README.md).
 2. Open an issue: **Issues → New issue → Question** (include the command, the full error, and what you tried).
-3. Reach out to me:
+3. Reach out to me. **LinkedIn is the fastest way:**
 
 <table>
   <tr><td><b>👤 Taha Naqvi</b></td><td>Full-stack Blockchain Engineer</td></tr>
   <tr><td>GitHub</td><td><a href="https://github.com/TahaNaqv">github.com/TahaNaqv</a></td></tr>
-  <tr><td>LinkedIn</td><td><a href="https://www.linkedin.com/in/taha-a-naqvi/">linkedin.com/in/taha-a-naqvi</a></td></tr>
+  <tr><td><b>LinkedIn (preferred)</b></td><td><a href="https://www.linkedin.com/in/taha-a-naqvi/">linkedin.com/in/taha-a-naqvi</a></td></tr>
   <tr><td>Email</td><td><a href="mailto:t.a.naqvi14@gmail.com">t.a.naqvi14@gmail.com</a></td></tr>
 </table>
 

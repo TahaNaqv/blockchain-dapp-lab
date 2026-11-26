@@ -1,7 +1,7 @@
 # 🏗️ Assignment — Build Your Own Small DApp
 
 **Course:** Blockchain — Dr. Noshina Tariq · FAST-NUCES Islamabad
-**Set by:** Taha Naqvi (guest session) · **Team:** individual or pairs *(your instructor decides)* · **Time:** ~2 weeks
+**Set by:** Taha Naqvi (guest session) · **Team:** groups of **up to 3** students (solo or pairs are fine too) · **Time:** **1 week**
 **Deadline & submission method:** announced by your instructor
 
 > Build a **small but complete** decentralized app, end to end, **100 % TypeScript**:
@@ -41,7 +41,7 @@ The infrastructure is already done: env validation, webhook signature checks, th
 ## 2. Pick ONE idea (or propose your own)
 
 Each idea is deliberately small. Do the **core**; **stretch** is optional extra credit.
-*Voting is not allowed — it's the example.* Your own idea is welcome: send your instructor a 3-line description first.
+*Voting is not allowed — it's the example.* Your own idea is welcome: send a 3-line description to your instructor (or to me on LinkedIn) **on day 1**, and keep it as small as the ideas below.
 
 | # | Idea | Core (required) | Stretch (optional) |
 |---|---|---|---|
@@ -92,7 +92,8 @@ Each idea is deliberately small. Do the **core**; **stretch** is optional extra 
 One paragraph: what problem it solves and who uses it.
 
 ## Team
-Name (roll no) — Name (roll no)
+| Name | Roll no | Main part (contract / backend / frontend) |
+|---|---|---|
 
 ## Architecture
 Contract → events → backend (Express + PostgreSQL) → API → React. (A diagram helps!)
@@ -119,8 +120,8 @@ Contract → events → backend (Express + PostgreSQL) → API → React. (A dia
 ```
 </details>
 
-### The viva (5–10 minutes)
-You'll be asked to: show your app working · explain one contract function and its event · find where your backend stores that event
+### The viva (5–10 minutes per group)
+**Every member is asked questions**, including about parts they didn't build. You'll be asked to: show your app working · explain one contract function and its event · find where your backend stores that event
 (`decode.ts` → `project()`) · explain one test · answer "what happens if the same webhook arrives twice?" or "why does the user sign, not the
 server?". **AI tools are fine — not understanding your own code is not.**
 
@@ -140,19 +141,40 @@ server?". **AI tools are fine — not understanding your own code is not.**
 
 ---
 
-## 5. Suggested plan
+## 5. Working as a team (up to 3 members)
 
-| Days | Do |
-|---|---|
-| 1–2 | Read 05-how-it-works. Run the Voting DApp **locally** (3A). Pick your idea. Write functions + events on paper. |
-| 3–5 | Contract + tests → deploy **locally** → `npm run export:local`. |
-| 6–9 | Backend: Prisma models → decode & store your events → API endpoints (still local). |
-| 10–12 | Frontend: pages, data from the API, transactions. |
-| 13–14 | Deploy to **Sepolia**, Alchemy webhook, README, screenshots, demo video. Ask a classmate to run your repo from the README. |
+One week is enough **if you split the work and start on day 1**. The three layers split naturally:
+
+| Member | Owns | Agrees with the others on day 1 |
+|---|---|---|
+| **A: Contract** | Contract, tests, deployment (`contracts/`) | The **events** (names + fields): the contract emits them, the backend stores them |
+| **B: Backend** | Prisma models, decode/store events, API routes (`backend/`) | The **API responses** (JSON shapes) the frontend will use |
+| **C: Frontend** | Pages, API client, transactions (`frontend/`) | Which **buttons/transactions** each page needs |
+
+Rules:
+- **Every member commits** to the shared GitHub repo (we check the history), and **every member must be able to explain every layer** in the viva.
+- Two people? Split contract + backend / frontend. Alone? Follow the plan below in order, and keep to the core of a small idea.
+
+### Suggested 7-day plan
+
+| Day | Whole group | A: Contract | B: Backend | C: Frontend |
+|---|---|---|---|---|
+| **1** | Everyone runs the Voting DApp **locally** (dapp/README §3A) and reads [05-how-it-works](docs/05-how-it-works.md). Pick the idea; agree on **functions, events and API shapes** on paper. Create the GitHub repo ([04 §9](docs/04-build-your-dapp.md)). | | | |
+| **2** | | Contract + first tests | Prisma models for the agreed events | Pages with **dummy data** (hard-coded JSON in the agreed shape) |
+| **3** | | All tests (≥ 8, ≥ 3 reverts) → `deploy:local` → `export:local` | `decode.ts` + `project()` → events stored | API client + query hooks |
+| **4** | **Integrate locally:** contract → backend → frontend on the local chain | Help B/C; fix contract issues | API endpoints (≥ 3) | Replace dummy data with the real API |
+| **5** | | Deploy to **Sepolia** + export | Alchemy webhook + ngrok, test with real events | Write actions (≥ 2) with status + friendly errors |
+| **6** | **Full test on Sepolia**; fix bugs; everyone runs the app from the README on their own laptop | | | |
+| **7** | **README, screenshots, demo video, submit.** Practise the viva: everyone explains every layer. | | | |
+
+> ⏰ The most common way to fail a 1-week project is losing day 1–2 to setup. Install everything ([docs/01-setup.md](docs/01-setup.md))
+> **before** the week starts, and if setup is stuck for more than an hour, ask for help right away (see §7).
 
 ---
 
 ## 6. FAQ
+**Can we be 4?** No, maximum 3. Smaller groups (1–2) are fine; keep the idea small.
+**One member isn't contributing.** Tell your instructor early (not on the last day). Git history shows who did what.
 **Do I need Docker?** No. Use a free **Neon** PostgreSQL database (copy its URL into `DATABASE_URL`). Docker is just the easiest local option.
 **Can I use JavaScript instead of TypeScript?** No. TypeScript catches most mistakes before you run anything.
 **Can I use wagmi/viem, Tailwind, or another UI library?** Yes, as long as it's React + Vite + TypeScript.
@@ -165,13 +187,14 @@ server?". **AI tools are fine — not understanding your own code is not.**
 ## 7. Getting help
 1. Read the **Troubleshooting** sections in [dapp/README.md](dapp/README.md) and [docs/01-setup.md](docs/01-setup.md), and [docs/GLOSSARY.md](docs/GLOSSARY.md).
 2. Search the error message. Most are common.
-3. Still stuck? Open an issue on this repository (*Issues → New issue → Question*), or contact me:
+3. Still stuck? **Message me on LinkedIn** (https://www.linkedin.com/in/taha-a-naqvi/). That's the fastest way to reach me. You can also open an issue on this
+   repository (*Issues → New issue → Question*) or email me.
 
 | | |
 |---|---|
 | 👤 **Taha Naqvi** | Full-stack Blockchain Engineer |
 | GitHub | https://github.com/TahaNaqv |
-| LinkedIn | https://www.linkedin.com/in/taha-a-naqvi/ |
+| **LinkedIn (preferred)** | https://www.linkedin.com/in/taha-a-naqvi/ |
 | Email | t.a.naqvi14@gmail.com |
 
 When you ask, include what you ran, the full error, and what you already tried. Good luck, and have fun building! 🚀
